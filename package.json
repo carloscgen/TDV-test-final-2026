@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "swagger": "node swagger-server.js",
+    "test:swagger": "node tests/swagger-ui.js",
+    "test:user": "node tests/auth-user.js",
+    "test:repos": "node tests/list-repos.js",
+    "test:create": "node tests/create-repo.js"
+  },
+  "dependencies": {
+    "swagger-ui-dist": "^5.35.0"
+  },
+  "devDependencies": {
+    "selenium-webdriver": "4.51.0"
+  }
+}

@@ -1,0 +1,215 @@
+openapi: 3.0.3
+
+info:
+  title: GitHub REST API - TP Final TDV
+  version: 1.0.0
+  description: Documentación de operaciones de GitHub utilizadas en el TP.
+
+servers:
+  - url: https://api.github.com
+
+paths:
+  /user/repos:
+    get:
+      summary: Listar repositorios del usuario autenticado
+      description: Obtiene los repositorios accesibles del usuario autenticado.
+      operationId: listarRepositorios
+      responses:
+        "200":
+          description: Repositorios obtenidos correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    private:
+                      type: boolean
+                    html_url:
+                      type: string
+                      format: uri
+
+    post:
+      summary: Crear un repositorio
+      description: Crea un repositorio para el usuario autenticado.
+      operationId: crearRepositorio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                private:
+                  type: boolean
+
+      responses:
+        "201":
+          description: Repositorio creado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  description:
+                    type: string
+                    nullable: true
+                  private:
+                    type: boolean
+                  html_url:
+                    type: string
+                    format: uri
+
+  /user:
+    get:
+      summary: Obtener el usuario autenticado
+      description: Devuelve información del usuario autenticado mediante Bearer Token.
+      operationId: obtenerUsuario
+      responses:
+        "200":
+          description: Usuario obtenido correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  login:
+                    type: string
+                  id:
+                    type: integer
+                  html_url:
+                    type: string
+                    format: uri
+
+  /repos/{owner}/{repo}/pulls:
+    post:
+      summary: Crear un Pull Request
+      description: Crea un Pull Request entre dos ramas.
+      operationId: crearPullRequest
+
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+
+        - name: repo
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - head
+                - base
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+                head:
+                  type: string
+                base:
+                  type: string
+
+      responses:
+        "201":
+          description: Pull Request creado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  number:
+                    type: integer
+                  title:
+                    type: string
+                  state:
+                    type: string
+                  html_url:
+                    type: string
+                    format: uri
+
+  /repos/{owner}/{repo}/issues/{issue_number}/comments:
+    post:
+      summary: Comentar un Pull Request
+      description: Agrega un comentario general a un Pull Request existente.
+      operationId: comentarPullRequest
+
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+
+        - name: repo
+          in: path
+          required: true
+          schema:
+            type: string
+
+        - name: issue_number
+          in: path
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - body
+              properties:
+                body:
+                  type: string
+                  description: Texto del comentario
+
+      responses:
+        "201":
+          description: Comentario creado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  body:
+                    type: string
+                  html_url:
+                    type: string
+                    format: uri
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+security:
+  - bearerAuth: []
