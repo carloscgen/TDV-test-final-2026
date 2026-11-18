@@ -35,6 +35,7 @@ async function main() {
     assert.equal(repository.description, requestBody.description);
     assert.equal(repository.private, requestBody.private);
     assert.ok(/^https:\/\/github\.com\//.test(repository.html_url), 'La respuesta no contiene una URL de GitHub.');
+    assert.ok(repository.html_url.endsWith(`/${repositoryName}`), 'La URL no corresponde al repositorio creado.');
 
     console.log(`Repositorio privado creado: ${repository.html_url}`);
     console.log('Verificá que aparezca en GitHub al abrir esa URL con tu sesión iniciada.');

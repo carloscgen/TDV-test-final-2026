@@ -24,6 +24,7 @@ async function main() {
     assert.equal(status, '200', `GET /user/repos respondió HTTP ${status} en lugar de 200.`);
     const repositories = JSON.parse(body);
     assert.ok(Array.isArray(repositories), 'La respuesta de repositorios no es una lista.');
+    assert.ok(repositories.length > 0, 'La lista de repositorios está vacía.');
     for (const repository of repositories) {
       assert.equal(typeof repository.name, 'string', 'Falta el nombre de un repositorio.');
       assert.equal(typeof repository.private, 'boolean', 'Falta la visibilidad de un repositorio.');
